@@ -15,6 +15,7 @@ public class Game : MonoBehaviour
 	[SerializeField] UIController uiController;
 	[SerializeField] Water waterControl;
 	[SerializeField] CameraControl cameraController;
+	[SerializeField] WallsControl wallsControl;
 
 	void Awake(){
 		instance = this;
@@ -31,6 +32,7 @@ public class Game : MonoBehaviour
 		levelControl.Reset();
 		jellyControl.Reset();
 		waterControl.Reset();
+		wallsControl.Reset();
 		uiController.ToggleGameScreen();
 	}
 

@@ -44,15 +44,15 @@ public class LevelControl : MonoBehaviour {
 
 	void OnPlatformLanded(Obstacle obstacle) {
 		var idx = _currentChunk.IndexOf(obstacle);
-		if( idx > prevIdx){
-			if(prevIdx == -1){
+		if (idx > prevIdx) {
+			if (prevIdx == 0 && _prevChunk.Count > 0) {
 				//clear prev chunk when jumped to new one
-				// ClearPrevChunk();
+				ClearPrevChunk();
 			}
 			//in case you can jump over more than one
 			//(i found it possible on trampoline in orig game)
 			//but it'll require to rework activation of obstacles (with triggers probably)
-			currentBlockId += (idx-prevIdx);
+			currentBlockId += (idx - prevIdx);
 			nextObstacleReached(currentBlockId);
 			prevIdx = idx;
 
@@ -78,8 +78,8 @@ public class LevelControl : MonoBehaviour {
 		_currentChunk[0].Activate();
 	}
 
-	void ClearCurrentChunk(){
-		while(_currentChunk.Count>0){
+	void ClearCurrentChunk() {
+		while (_currentChunk.Count > 0) {
 			//TODO: return to pool
 			GameObject.Destroy(_currentChunk[0].gameObject);
 			_currentChunk.RemoveAt(0);
@@ -87,8 +87,8 @@ public class LevelControl : MonoBehaviour {
 		_currentChunk.Clear();
 	}
 
-	void ClearPrevChunk(){
-		while(_prevChunk.Count>0){
+	void ClearPrevChunk() {
+		while (_prevChunk.Count > 0) {
 			//TODO: return to pool
 			GameObject.Destroy(_prevChunk[0].gameObject);
 			_prevChunk.RemoveAt(0);
@@ -97,7 +97,7 @@ public class LevelControl : MonoBehaviour {
 	}
 
 	public void SpawnNextChunk() {
-		_prevChunk = _currentChunk;
+		_prevChunk = new List<Obstacle>(_currentChunk);
 		_currentChunk.Clear();
 		for (int i = currentBlockId; i < currentBlockId + prefetchCount; i++) {
 			var nextObstacleData = level[i % level.Length];

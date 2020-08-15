@@ -22,7 +22,7 @@ public class JellyControl : MonoBehaviour {
 		_cachedTransform = GetComponent<Transform>();
 	}
 
-	public void Reset(){
+	public void Reset() {
 		_cachedTransform.position = Vector3.zero;
 		_isDrowned = false;
 		_isJumping = false;
@@ -30,26 +30,36 @@ public class JellyControl : MonoBehaviour {
 	}
 
 	void OnJumpAction() {
-		if (!_isJumping) {
+		if (!_isJumping && !_applyJumpForce) {
 			_applyJumpForce = true;
 			_isJumping = true;
 		}
 	}
 
+	void OnCollisionEnter(Collision collision) {
+		var obstacle = collision.gameObject.GetComponent<Obstacle>();
+		if (obstacle != null) {
+			if (obstacle.transform.position.y < _cachedTransform.position.y) {
+				_isJumping = false;
+			}
+		}
+	}
+
+	//used to check collision with obstacles
 	void OnCollisionStay(Collision collision) {
 		var obstacle = collision.gameObject.GetComponent<Obstacle>();
 		if (obstacle != null) {
 			if (obstacle.transform.position.y < _cachedTransform.position.y) {
 				//Means we landed on top of platform
 				landedOnPlatform(obstacle);
-				_isJumping = false;
+				// _isJumping = false;
 			}
 		}
 	}
 
 	//water is set with trigger colliders - so no check fo origin of collider needed
 	void OnTriggerStay(Collider collider) {
-		if(!_isDrowned){
+		if (!_isDrowned) {
 			if (collider.transform.position.y > _cachedTransform.position.y) {
 				_isDrowned = true;
 				drowned();
@@ -63,7 +73,7 @@ public class JellyControl : MonoBehaviour {
 			_applyJumpForce = false;
 		}
 	}
-
+	//todo: move away to some input handler
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			OnJumpAction();

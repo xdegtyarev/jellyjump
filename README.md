@@ -1,3 +1,1 @@
-# chimpworks
-
-[Docs](https://www.notion.so/xdegtyarev/JellyJump-docs-1fe258dc27374faebea78f1379745fb2)
+8 hour attempt to recreate JellyJump. Not the best code, had to do it as quick as possible. 
